@@ -27,7 +27,7 @@ class graph{
         dist[source]=0;
         
         PriorityQueue<Long> pq=new PriorityQueue();
-        pq.add(((long)source<<32)+source);
+        pq.add(((long)0<<32)+source);
         while(!pq.isEmpty()){
             long temp=pq.poll();
             int curr=(int)temp;
@@ -86,7 +86,7 @@ class Edge{
                  int[] dist=new int[6];
                  int[] parent=new int[6];
                  g.dijkstra(g, 0, dist, parent);
-                
+                //you can start from any vertex.Not necessarily 0
                  for(int i=0;i<6;i++){
                      System.out.print(dist[i]+" ");
                  }
