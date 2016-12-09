@@ -1,0 +1,273 @@
+import java.io.*;
+import java.util.*;
+ 
+
+class graph{
+    int v;
+    LinkedList<Edge>[] ar;
+    
+    graph(int v){
+        this.v=v;
+        ar=new LinkedList[v];
+        for(int i=0;i<v;i++){
+            ar[i]=new LinkedList();
+        }
+    }
+    
+    void addedge(int u,int t,int cost){
+        ar[u].add(new Edge(t,cost));
+        ar[t].add(new Edge(u,cost));
+    }
+    
+    
+    void dijkstra(graph g,int source,int[] dist,int[] parent){
+        
+        Arrays.fill(parent, -1);
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[source]=0;
+        
+        PriorityQueue<Long> pq=new PriorityQueue();
+        pq.add(((long)source<<32)+source);
+        while(!pq.isEmpty()){
+            long temp=pq.poll();
+            int curr=(int)temp;
+            
+            if(temp>>>32 != dist[curr]) continue;//to check for same vertex repeated update values;
+            
+            for(Edge e:g.ar[curr]){
+                
+                int v=e.v;
+                int cost=e.cost;
+                if(dist[curr]+cost<dist[v]){
+                    dist[v]=dist[curr]+cost;
+                    parent[v]=curr;
+                    pq.add(((long)dist[v]<<32)+v);
+                }
+               
+            }
+        }
+        
+    }
+    
+}
+
+
+
+class Edge{
+    int v;
+    int cost;
+    Edge(int v,int cost){
+        this.v=v;
+        this.cost=cost;
+        
+    }
+    
+}
+       
+
+ class jam
+{
+
+	public static void main(String args[]) throws Exception
+	{
+		InputReader sc=new InputReader(System.in);		
+		PrintWriter pw=new PrintWriter(System.out);
+      
+                graph g=new graph(6);
+                
+                 g.addedge(0, 1, 5);
+                 g.addedge(0, 3, 9);
+                 g.addedge(0, 4, 2);
+                 g.addedge(1, 2, 2);
+                 g.addedge(4, 5, 3);
+                 g.addedge(2, 3, 3);
+                 g.addedge(3, 5, 2);
+                
+                 int[] dist=new int[6];
+                 int[] parent=new int[6];
+                 g.dijkstra(g, 0, dist, parent);
+                
+                 for(int i=0;i<6;i++){
+                     System.out.print(dist[i]+" ");
+                 }
+                
+               
+                 }
+ }
+	 class InputReader
+	{
+		private InputStream stream;
+		private byte[] buf = new byte[1024];
+		private int curChar;
+		private int numChars;
+		private SpaceCharFilter filter;
+		
+		public InputReader(InputStream stream)
+		{
+			this.stream = stream;
+		}
+		
+		public int read()
+		{
+			if (numChars==-1) 
+				throw new InputMismatchException();
+			
+			if (curChar >= numChars)
+			{
+				curChar = 0;
+				try 
+				{
+					numChars = stream.read(buf);
+				}
+				catch (IOException e)
+				{
+					throw new InputMismatchException();
+				}
+				
+				if(numChars <= 0)				
+					return -1;
+			}
+			return buf[curChar++];
+		}
+	 
+		public String nextLine()
+		{
+			BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+			String str = "";
+            try
+            {
+                str = br.readLine();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return str;
+		}
+		public int nextInt()
+		{
+			int c = read();
+			
+			while(isSpaceChar(c)) 
+				c = read();
+			
+			int sgn = 1;
+			
+			if (c == '-') 
+			{
+				sgn = -1;
+				c = read();
+			}
+			
+			int res = 0;
+			do 
+			{
+				if(c<'0'||c>'9') 
+					throw new InputMismatchException();
+				res *= 10;
+				res += c - '0';
+				c = read();
+			}
+			while (!isSpaceChar(c)); 
+			
+			return res * sgn;
+		}
+		
+		public long nextLong() 
+		{
+			int c = read();
+			while (isSpaceChar(c))
+				c = read();
+			int sgn = 1;
+			if (c == '-') 
+			{
+				sgn = -1;
+				c = read();
+			}
+			long res = 0;
+			
+			do 
+			{
+				if (c < '0' || c > '9')
+					throw new InputMismatchException();
+				res *= 10;
+				res += c - '0';
+				c = read();
+			}
+			while (!isSpaceChar(c));
+				return res * sgn;
+		}
+		
+		public double nextDouble() 
+		{
+			int c = read();
+			while (isSpaceChar(c))
+				c = read();
+			int sgn = 1;
+			if (c == '-') 
+			{
+				sgn = -1;
+				c = read();
+			}
+			double res = 0;
+			while (!isSpaceChar(c) && c != '.') 
+			{
+				if (c == 'e' || c == 'E')
+					return res * Math.pow(10, nextInt());
+				if (c < '0' || c > '9')
+					throw new InputMismatchException();
+				res *= 10;
+				res += c - '0';
+				c = read();
+			}
+			if (c == '.') 
+			{
+				c = read();
+				double m = 1;
+				while (!isSpaceChar(c)) 
+				{
+					if (c == 'e' || c == 'E')
+						return res * Math.pow(10, nextInt());
+					if (c < '0' || c > '9')
+						throw new InputMismatchException();
+					m /= 10;
+					res += (c - '0') * m;
+					c = read();
+				}
+			}
+			return res * sgn;
+		}
+		
+		public String readString() 
+		{
+			int c = read();
+			while (isSpaceChar(c))
+				c = read();
+			StringBuilder res = new StringBuilder();
+			do 
+			{
+				res.appendCodePoint(c);
+				c = read();
+			} 
+			while (!isSpaceChar(c));
+			
+			return res.toString();
+		}
+	 
+		public boolean isSpaceChar(int c) 
+		{
+			if (filter != null)
+				return filter.isSpaceChar(c);
+			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+		}
+	 
+		public String next() 
+		{
+			return readString();
+		}
+		
+		public interface SpaceCharFilter 
+		{
+			public boolean isSpaceChar(int ch);
+		}
+	}
