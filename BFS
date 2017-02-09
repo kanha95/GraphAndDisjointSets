@@ -1,105 +1,80 @@
 import java.io.*;
 import java.util.*;
- 
 
-  
-   
-       
 
 class graph{
 
-    int Vertices;
-    LinkedList<Integer> adj[];
-   
+    int V;
+    LinkedList<Integer>[] adj;
+    
     graph(int v){
-        Vertices=v;
+        V=v;
         adj=new LinkedList[v];
-     
+        
         for(int i=0;i<v;i++){
             adj[i]=new LinkedList();
-
-        }    
-    }
-    void addEdge(int x,int y){
-        adj[x].add(y);
-      
-        
-    }
-    void display(){
-   for(int i=0;i<Vertices;i++){
-       for(Integer j:adj[i]){
-           System.out.print(j+" ");
-       }
-       System.out.println("");
-   }
+        }
     }
     
-    void dfs(){
-        
-        boolean[] visited=new boolean[Vertices];
-        
-        for(int i=0;i<Vertices;i++){
-            if(!visited[i]){
-                dfsutil(i,visited);
-            }
-        }
-        
+    void addEdge(int u,int v){
+        adj[u].add(v);
+        adj[v].add(u);
     }
-    void dfsutil(int i,boolean[] visited){
-     
-        visited[i]=true;
-      
-        
-        Stack<Integer> s=new Stack();
-        s.push(i);
-        int x=0;
-        while(!s.empty()){
-            x=s.pop();
+
+    void bfs(){
+        boolean[] visited=new boolean[V];
+       Deque<Integer> s=new ArrayDeque();
+        s.add(0);
+       
+        while(!s.isEmpty()){
+            int x=s.pollFirst();
+            
+            if(!visited[x]){
             System.out.print(x+" ");
-            for(Integer a:adj[x]){
-                if(!visited[a]){
-                    s.push(a);
-                    visited[a]=true;
-                    
+            }
+            visited[x]=true;
+            for(Integer i:adj[x]){
+                if(!visited[i]){
+                   
+                    s.add(i);
                 }
             }
             
+            
         }
         
+        
     }
-     
+
+
 }
 
 
- class jam
+ class Main
 {
+     
+     
+     
+     
 
-   
-  
-	public static void main(String args[]) throws Exception
+   public static void main(String args[]) throws Exception
 	{
 		InputReader sc=new InputReader(System.in);		
 		PrintWriter w=new PrintWriter(System.out);
       
-      
+                graph g=new graph(5);
+               
+              g.addEdge(1, 0);
+    g.addEdge(0, 2);
+    g.addEdge(2, 1);
+    g.addEdge(0, 3);
+    g.addEdge(1, 4);   
                 
-                graph g = new graph(4);
- 
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
-        g.addEdge(2, 0);
-        g.addEdge(2, 3);
-        g.addEdge(3, 3);
-                
-                g.display();
-                System.out.println("----------");
-                
-         g.dfs();
+        g.bfs();
         }
-        }
+        
  
- 
+ }
  
 	 class InputReader
 	{
@@ -277,4 +252,4 @@ class graph{
 		{
 			public boolean isSpaceChar(int ch);
 		}
-	}
+	} 
