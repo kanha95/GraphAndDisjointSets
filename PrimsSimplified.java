@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.*;
 
 
@@ -76,7 +77,48 @@ class graph{
         
     }
     
-
+    void dfsUtil(int[][] res){
+        
+        for(int i=0;i<v;i++){
+            dfs(i,res);
+        }
+        
+    }
+   
+    class dpair{
+        int x,y;
+        dpair(int x,int y){
+            this.x=x;
+            this.y=y;
+        }
+    }
+    void dfs(int start,int[][] res){
+        boolean[] vis=new boolean[v];
+        
+        
+        Stack<dpair> s=new Stack<>();
+        
+        s.push(new dpair(start,0));
+        
+        while(!s.isEmpty()){
+           int x=s.peek().x;
+           int wt=s.peek().y;
+           s.pop();
+           vis[x]=true;
+           
+           for(edge e:adj[x]){
+               if(!vis[e.x]){
+                   res[start][e.x]=wt+e.wt;
+                   s.push(new dpair(e.x,res[start][e.x]));
+               }
+           }
+           
+               
+        }
+        
+        
+        
+    }
     
     
 }
@@ -85,7 +127,7 @@ class Main{
     
     public static void main(String[] args){
         InputReader sc=new InputReader(System.in);
-        
+        PrintWriter pw=new PrintWriter(System.out);
         int t=sc.nextInt();
         
         for(int uu=1;uu<=t;uu++){
@@ -107,39 +149,19 @@ class Main{
             for (int i = 1; i < n; i++) {
                 g1.addEdge(i, g.pred[i], g.cost[i]);
             }
-            System.out.println("Case: "+uu);
+            int[][] res=new int[n][n];
+            g1.dfsUtil(res);
+            pw.println("Case: "+uu);
             for (int i = 0; i < m; i++) {
                 int u=sc.nextInt()-1;
                 int v=sc.nextInt()-1;
                 
-                HashMap<Integer,Integer> hm=new HashMap<>();
-                boolean[] vis=new boolean[n];
-                
-                Deque<Integer> queue=new ArrayDeque<>();
-                
-                queue.add(u);
-                hm.put(u,0);
-                long ans=0;
-                while(!queue.isEmpty()){
-                    int c=queue.pollFirst();
-                    vis[c]=true;
-                    
-                    if(c==v){
-                        ans=hm.get(c);
-                        break;
-                    }
-                    
-                    for(edge eg:g1.adj[c]){
-                        if(!vis[eg.x]){
-                            hm.put(eg.x, hm.get(c)+eg.wt);
-                            queue.addLast(eg.x);
-                        }
-                    }
-                    
+               
+                pw.println(res[u][v]);    
                     
                 }
-                
-                System.out.println(ans);
+                pw.flush();
+               
             }
             
             
@@ -149,8 +171,8 @@ class Main{
     }
     
     
-    
-}
+
+
 
  class InputReader
 	{
