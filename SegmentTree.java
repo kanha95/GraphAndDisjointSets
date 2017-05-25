@@ -54,6 +54,24 @@ class SegmentTree{
         
         return Math.min(queryUtil(start,mid,left,right,2*node+1),queryUtil(mid+1,end,left,right,2*node+2));
     }
+    
+    int update(int start,int end,int index,int value,int node){
+        if(index<start || index>end){
+            return st[node];
+        }
+        
+        if(start==end){
+            if(index==start){
+                st[node]=value;
+            }
+            return st[node];
+        }
+        
+        int mid=start+(end-start)/2;
+        st[node]=Math.min(update(start,mid,index,value,2*node+1), update(mid+1,end,index,value,2*node+2));
+        
+        return st[node];
+    }
 }
 
 class Main{
@@ -68,8 +86,11 @@ class Main{
              
             SegmentTree st=new SegmentTree(n);
             st.build(ar, 0, n-1, 0);
-         
-            System.out.println(st.query(1, 3));
+            int index=3;
+            int value=0;
+            st.update(0,n-1,index,value,0);
+            st.update(0,n-1,2,-1,0);
+            System.out.println(st.query(3,6));
         
         
         }   
