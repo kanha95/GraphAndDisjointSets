@@ -50,6 +50,8 @@ class graph{
 		while(!pq.isEmpty()) {
 			edge temp = pq.poll();
 			
+			if(visited[temp.id]) continue;
+			
 			visited[temp.id] = true;
 			
 			for(edge e: adj[temp.id]) {
