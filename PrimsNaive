@@ -1,0 +1,92 @@
+import java.util.*;
+import java.io.*;
+
+class edge implements Comparable<edge>{
+	int id;
+	long wt;
+	edge(int id, long wt){
+		this.id = id;
+		this.wt = wt;
+	}
+	
+	public int compareTo(edge that){
+	    return Long.compare(this.wt, that.wt);
+	}
+}
+
+class graph{
+	int v;
+	LinkedList<edge>[] adj;
+	
+	graph(int n){
+	    v = n;
+		adj = new LinkedList[n];
+		
+		for(int i=0;i<n;i++) {
+			adj[i] = new LinkedList<>();
+		}
+	}
+	
+	void addEdge(int i, int j, long wt) {
+		adj[i].add(new edge(j,wt));
+		adj[j].add(new edge(i,wt));
+	}
+	
+	void prims(int source) {
+		
+		PriorityQueue<edge> pq = new PriorityQueue();
+		long[] dist = new long[v];
+		boolean[] visited = new boolean[v];
+		
+		pq.add(new edge(source, 0));
+		long sum = 0;
+    
+		while(!pq.isEmpty()) {
+			edge temp = pq.poll();
+			
+			if(visited[temp.id]) continue;
+			
+			visited[temp.id] = true;
+			sum += temp.wt;
+			for(edge e: adj[temp.id]) {
+				if(!visited[e.id] ) {
+					pq.add(new edge(e.id, e.wt));
+				}
+			}
+			
+		
+			
+		}
+	
+		System.out.println(sum);
+		
+	}
+	
+}
+
+
+public class TestClass{
+
+   
+		public static void main (String[] args) throws Exception
+		 {
+		 
+		  //Scanner sc = new Scanner(System.in);
+		 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		 String[] tt = br.readLine().trim().split(" ");
+		int n = Integer.parseInt(tt[0]);
+		int m = Integer.parseInt(tt[1]);
+		
+		graph g = new graph(n);
+		
+		for(int i=0; i<m; i++){
+		    String[] ss = br.readLine().trim().split(" ");
+		    
+		    g.addEdge(Integer.parseInt(ss[0])-1, Integer.parseInt(ss[1])-1, Long.parseLong(ss[2]));
+		}
+		
+		 g.prims(0);
+		 }
+    
+    
+}
