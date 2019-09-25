@@ -60,7 +60,7 @@ class graph{
             visited[u]=true;
             res+=e.wt;
             for(edge ed:adj[u]){
-                if(!visited[ed.x] && ed.wt<cost[ed.x]){
+                if(!visited[ed.x] && ed.wt<cost[ed.x]){ // ed.wt<cost[ed.x] is an optimisation used. Check prims naive and then this optimisation
                     cost[ed.x]=ed.wt;
                     
                     pred[ed.x]=u;
