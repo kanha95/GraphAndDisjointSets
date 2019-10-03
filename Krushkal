@@ -1,0 +1,115 @@
+
+import java.util.*;
+
+class edge implements Comaparable<edge>{
+	int u, v, wt;
+	edge(int u, int v, int wt){
+		this.u = u;
+		this.v = v;
+		this.wt = wt;
+	}
+  
+  public int compareTo(pair that){
+  return Integer.compare(this.wt, that.wt);
+  }
+  
+}
+
+class disjointSet{
+	int[] map;
+	
+	void makeset(int n) {
+		map = new int[n];
+		Arrays.fill(map,  -1);
+	}
+	
+	int find(int x) {
+		
+		if(map[x] < 0) {
+			return x;
+		}
+		else {
+			map[x] = find(map[x]);
+		}
+		return map[x];
+		
+	}
+	
+	void union(int x, int y) {
+		int x_parent = find(x);
+		int y_parent = find(y);
+		
+		if(x_parent != y_parent) {
+			if(map[x_parent] < map[y_parent]) {
+				map[x_parent] += map[y_parent];
+				map[y_parent] = x_parent;
+			}
+			else {
+				map[y_parent] += map[x_parent];
+				map[x_parent] = y_parent;
+			}
+			
+			
+		}
+	}
+	
+	
+}
+
+
+public class Solution{
+    
+    public static void main(String[] args){
+        
+        Scanner sc = new Scanner(System.in);
+        
+        int t = sc.nextInt();
+        
+        
+        for(int i=1; i<=t; i++){
+            int n = sc.nextInt();
+            int m = sc.nextInt();
+            
+           
+            
+            System.out.print("Case #"+i+": ");
+            
+             disjointSet ds = new disjointSet();
+             edge[] edges = new edge[m];
+             
+             ds.makeset(n);
+             
+             int cc = 0;
+             
+             for(int j=0; j<m; j++){
+             int p = sc.nextInt();
+             int q = sc.nextInt();
+             
+             edges[cc++] = new edge(p-1, q-1, 1);
+             }
+             
+             //sort all the edges in ascending order
+             Arrays.sort(edges);
+             
+             long ans = 0;
+             
+             //krushkal algorithm starts here
+             
+             for(int j=0; j<m ;j++) {
+            	 if(ds.find(edges[j].u) != ds.find(edges[j].v)) {
+            		 ans = ans + edges[j].wt;
+            		 ds.union(edges[j].u, edges[j].v);
+            	 }
+             }
+             
+             System.out.println(ans);
+            
+            
+        }
+        
+        
+    }
+    
+    
+    
+}
